@@ -36,9 +36,8 @@
 
 #ifndef DMXAnalysisManager_h
 #define DMXAnalysisManager_h 1
-
-#include "G4AnalysisManager.hh"
-//#include "g4root.hh"
+//#include "G4AnalysisManager.hh" This line potentially replaces line 40 for newer versions of geant4
+#include "g4root.hh"
 //#include "g4xml.hh"
 //#include "g4csv.hh"   // can be used only with ntuples
 
