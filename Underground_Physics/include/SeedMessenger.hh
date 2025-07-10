@@ -34,7 +34,7 @@ class SeedMessenger: public G4UImessenger {
       G4int idx=0;
       G4long seeds[100];
       G4String vl;
-      while(!(vl=next()).empty()) {
+      while(!(vl=next()).isNull()) {
         seeds[idx] = StoL(vl);
         idx++;
       }
