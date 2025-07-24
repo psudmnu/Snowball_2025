@@ -35,8 +35,8 @@ include(${Geant4_USE_FILE})
 #endif()
 
 # Next two lines were added for GPS use instead of DMX gun
-set(DMXENV_GPS_USE_DEFAULT ON)
-set(DMXENV_GPS_USE ON)
+set(DMXENV_GPS_USE_DEFAULT OFF)
+set(DMXENV_GPS_USE OFF)
 
 
 option(DMXENV_GPS_USE "Build DMX with support for GPS" ${DMXENV_GPS_USE_DEFAULT})
