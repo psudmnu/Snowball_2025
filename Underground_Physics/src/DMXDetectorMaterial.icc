@@ -240,6 +240,13 @@
   wood->AddElement(H , 4);
   wood->AddElement(O , 1);
   wood->AddElement(C , 2);
+
+ // ethanol
+  G4Material* ethanol = new G4Material
+    (name="ethanol", density=0.789*g/cm3, ncomponents=3);
+  ethanol->AddElement(H , 6);
+  ethanol->AddElement(O , 1);
+  ethanol->AddElement(C , 2);
   
   // print materials
   //  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
@@ -274,3 +281,4 @@ jacketflange_mat = ssteel;
          pmt_mat = quartz;
       phcath_mat = cathmetalAl;
       H2O_mat = water;
+     // ethanol_mat = ethanol;

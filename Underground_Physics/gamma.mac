@@ -7,10 +7,10 @@
 ###############################################################################
 #
 # verbosities
-/control/verbose 1
-/run/verbose 1
+/control/verbose 0
+/run/verbose 0
 /tracking/verbose 0
-/hits/verbose 1
+/hits/verbose 0
 #
 # draw flags
 /dmx/draw/drawColours custom
@@ -19,17 +19,17 @@
 /dmx/draw/drawHits 1
 #
 # file output
-/dmx/savePmt  0
+/dmx/savePmt 0
 /dmx/saveHits 1
 #
 # gun: particle
 /dmx/gun/verbose 0
 /dmx/gun/particle gamma
 /dmx/gun/energytype Mono
-/dmx/gun/energy 60.0 keV
+/dmx/gun/energy 1 MeV
 #
 # gun: isotropic
-#/dmx/gun/angtype iso
+/dmx/gun/angtype iso 
 #
 # OR gun: shoot up
 /dmx/gun/angtype direction
@@ -41,11 +41,12 @@
 /dmx/gun/radius 250 um
 /dmx/gun/halfz 10.0 nm
 /dmx/gun/centre 0 0  -302.65 mm
-/dmx/gun/confine americium_phys
+#/dmx/gun/confine LXe_phys
 # 
-/dmx/hitsfile gamma.out
-/dmx/pmtfile gamma_pmt.out
-/dmx/histogramfile gamma
+/dmx/hitsfile gamma1MeV10.out
+/dmx/pmtfile gamma_pmt1MeV10.out
+/dmx/histogramfile gamma1MeV10
 #
-/run/beamOn 1
+
+/run/beamOn 10
 

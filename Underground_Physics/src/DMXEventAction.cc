@@ -81,6 +81,7 @@ DMXEventAction::DMXEventAction()
   : runAct(0),genAction(0),hitsfile(0),pmtfile(0)
 {
 
+
   // create messenger
   eventMessenger = new DMXEventActionMessenger(this);
 
@@ -323,7 +324,7 @@ void DMXEventAction::EndOfEventAction(const G4Event* evt) {
 
 void DMXEventAction::writeScintHitsToFile(const DMXScintHitsCollection* SHC)
 {
-
+  
   G4String filename="hits.out";
   if (runAct)
     filename=runAct->GetsavehitsFile();
@@ -353,6 +354,9 @@ void DMXEventAction::writeScintHitsToFile(const DMXScintHitsCollection* SHC)
     }
 
   if(S_hits) {
+    
+    //Define file for data output ntuple 3
+    
 
     if(hitsfile->is_open()) {
 
@@ -381,6 +385,8 @@ void DMXEventAction::writeScintHitsToFile(const DMXScintHitsCollection* SHC)
 		  << (electron_ev ? "electron " : "") 
 		  << (other_ev    ? "other " : "") 
 		  << G4endl;
+
+    
 
       if (event_id%printModulo == 0)
 	G4cout << "     Event summary in file " << filename << G4endl;  
@@ -428,9 +434,12 @@ void DMXEventAction::writeScintHitsToFile(const DMXScintHitsCollection* SHC)
     man->FillNtupleDColumn(2,13,other_ev);	
     man->FillNtupleDColumn(2,14,seed1);
     man->FillNtupleDColumn(2,15,seed2);
+   
+
     man->AddNtupleRow(2);
     
-    
+    std::ofstream myfile;
+     myfile.open("Data.txt", std::ios_base::app);
     
     for (G4int i=0; i<S_hits; i++) {
     
@@ -459,10 +468,12 @@ void DMXEventAction::writeScintHitsToFile(const DMXScintHitsCollection* SHC)
     	G4double z;
     	
     	x = ((*SHC)[i]->GetPos()).x()/mm;
-	y = ((*SHC)[i]->GetPos()).y()/mm;
-	z = ((*SHC)[i]->GetPos()).z()/mm;
+	    y = ((*SHC)[i]->GetPos()).y()/mm;
+	    z = ((*SHC)[i]->GetPos()).z()/mm;
 	
-    
+  
+  
+
     	//Fill ntuple #3
 	man->FillNtupleDColumn(3,0,event_id);
 	man->FillNtupleDColumn(3,1,ParentID);
@@ -479,11 +490,12 @@ void DMXEventAction::writeScintHitsToFile(const DMXScintHitsCollection* SHC)
 	man->FillNtupleDColumn(3,10,hitTime);
 	man->FillNtupleDColumn(3,11,TrackLength);
 	
+  myfile << event_id << " " << ParentID << " " <<TrackID << " " <<PDGCode << " " << x <<" " << y << " " << z << " " <<particleEnergy << " " <<hitEnergyDeposited << " " <<hitTime  << G4endl;
 	
 	man->AddNtupleRow(3);
     
     } 
-    
+  myfile.close();
     
    
 }
