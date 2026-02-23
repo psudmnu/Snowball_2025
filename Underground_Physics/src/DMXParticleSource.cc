@@ -87,7 +87,7 @@ DMXParticleSource::DMXParticleSource() {
 
   AngDistType = "iso"; 
   MinTheta = 0.;
-  MaxTheta = pi;
+  MaxTheta = (3./8.)*pi;
   MinPhi = 0.;
   MaxPhi = twopi;
 
@@ -432,7 +432,3 @@ void DMXParticleSource::GeneratePrimaryVertex(G4Event *evt)
   if(verbosityLevel > 1)
     G4cout << " Primary Vetex generated "<< G4endl;   
 }
-
-
-
-

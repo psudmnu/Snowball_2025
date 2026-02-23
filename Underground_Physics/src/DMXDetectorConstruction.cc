@@ -312,6 +312,9 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4LogicalVolume* metallid_log;
   G4VPhysicalVolume* metallid_phys;
 
+  G4LogicalVolume* water_log;
+  G4VPhysicalVolume* water_phys;
+
   G4LogicalVolume* huber_log;
   G4VPhysicalVolume* huber_phys;
 
@@ -335,6 +338,11 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
    G4Tubs* metallid = new G4Tubs("metallid",0.*cm, 3.75*cm, 0.2*cm, 0.*deg, 360.*deg);
                     //inner radius, outer radius, thickness, degree start, degree finish 
 
+
+   G4Tubs *tubewater = new G4Tubs("tube_water", 0.0*cm, 1.775*cm, 0.5*cm, 0. *deg, 360. *deg);
+   G4Sphere*tubewaterbase = new G4Sphere("tube_waterbase",0.0*cm, 1.775*cm, 0.0*deg, 360*deg, 90*deg, 180.0*deg);
+
+
    //Put the tube together
    G4UnionSolid* tubewolip = new G4UnionSolid("tubewolip", quartz_cyllinder, quartz_semicircle, 
     G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,-3.45*cm)));
@@ -342,6 +350,8 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
     G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,-3.45*cm)));
    G4UnionSolid* quartz_tube = new G4UnionSolid("quartz_tube", tubewolip, quartz_lip, 
     G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,3.45*cm)));
+  G4UnionSolid* tube_water = new G4UnionSolid("tube_water", tubewater, tubewaterbase, 
+    G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,-0.5*cm)));
     G4UnionSolid* quartz_tuberemoval = new G4UnionSolid("quartz_tube", tubewolipremoval, quartz_lipremoval, 
     G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,3.45*cm)));
     G4UnionSolid* tuberemovalspace = new G4UnionSolid("tuberemovalspace", tubewolip, quartz_lip, 
@@ -354,8 +364,14 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
     quartztube_log = new G4LogicalVolume(quartz_tube,pmt_mat,"quartztube_log"); //previously 18.675? 20.35
     quartztube_phys = new G4PVPlacement(0, G4ThreeVector(0*cm,0.*cm,19.8*cm), "quartztube_phys", quartztube_log, lab_phys, false, 0);
 
+//Try adding 2 physical volumes rather than unioning
+
     metallid_log = new G4LogicalVolume(metallid, ring_mat,"metallid_log");
     metallid_phys = new G4PVPlacement(0,G4ThreeVector(0*cm,0.*cm,23.9*cm), "metallid_phys", metallid_log, lab_phys, false, 0);
+
+    water_log = new G4LogicalVolume(tube_water, H2O_mat, "water_log");
+    water_phys = new G4PVPlacement(0, G4ThreeVector(0*cm,0*cm,-2.775*cm), water_log, "water_phys", quartztube_log, false, 0);
+
 
     huber_log = new G4LogicalVolume(huber_tub, ring_mat,"huber_log");
     huber_phys = new G4PVPlacement(0,G4ThreeVector(0*cm,0.*cm,0*cm), "huber_phys", huber_log, lab_phys, false, 0);
@@ -620,6 +636,3 @@ void DMXDetectorConstruction::SetTimeCut(G4double val)
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-

@@ -33,7 +33,7 @@
 /dmx/gun/verbose 0
 /dmx/gun/particle neutron
 /dmx/gun/energytype Mono
-/dmx/gun/energy 1 MeV
+/dmx/gun/energy 3 MeV
 #
 # gun: isotropic
 # /dmx/gun/angtype iso
@@ -47,11 +47,11 @@
 /dmx/gun/shape Cylinder
 /dmx/gun/radius 250 um
 /dmx/gun/halfz 10.0 nm
-/dmx/gun/centre 0 0  -302.65 mm
+/dmx/gun/centre 0 0 -302.65 mm
 #
-/dmx/hitsfile 3neutron1MeV.out
+/dmx/hitsfile 3neutron3MeV.out
 /dmx/pmtfile neutron_pmt.out
-/dmx/histogramfile 3neutron1MeV
+/dmx/histogramfile 3neutron3MeV
 #
 /run/beamOn 3
 
