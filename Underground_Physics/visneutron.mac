@@ -1,6 +1,6 @@
 /run/initialize 
 
-/vis/heprep/setFileName Neutron1MeVGeomTestv21
+/vis/heprep/setFileName Neutron1MeVGeomTestv28
 /vis/open HepRepFile
 /vis/scene/create
 /vis/scene/add/volume
@@ -21,8 +21,8 @@
 # /tracking/verbose 1
 
 /dmx/gun/particle neutron
-/dmx/gun/energy 1 MeV
-/dmx/gun/position 0 0 1.5 cm
+/dmx/gun/energy 3 MeV
+/dmx/gun/position 0 0 28 cm
 /dmx/gun/direction 0 0 -1
 
 /run/beamOn 1
