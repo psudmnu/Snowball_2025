@@ -89,8 +89,18 @@ void DMXRunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+//void DMXRunAction::EndOfRunAction(const G4Run*)
+//{;}
+
 void DMXRunAction::EndOfRunAction(const G4Run*)
-{;}
+{
+    G4AnalysisManager* man = G4AnalysisManager::Instance();
+
+    man->Write();      
+    man->CloseFile(); 
+
+    G4cout << "ROOT file written and closed." << G4endl;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -144,7 +154,6 @@ void DMXRunAction::Book()
   man->CreateNtupleDColumn("ypos");
   man->CreateNtupleDColumn("zpos");
  // man->CreateNtupleDColumn("particleName");
- 
   man->CreateNtupleDColumn("PDGCode");
   man->CreateNtupleDColumn("particleEnergy");
   man->CreateNtupleDColumn("hitEnergyDeposited");

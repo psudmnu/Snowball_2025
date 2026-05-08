@@ -77,6 +77,7 @@ DMXParticleSource::DMXParticleSource() {
   particle_polarization = zero;
   particle_charge = 0.0;
 
+  
   SourcePosType = "Volume";
   Shape = "NULL";
   halfz = 0.;
@@ -87,7 +88,7 @@ DMXParticleSource::DMXParticleSource() {
 
   AngDistType = "iso"; 
   MinTheta = 0.;
-  MaxTheta = (3./8.)*pi;
+  MaxTheta = 0;//(3./8.)*pi;
   MinPhi = 0.;
   MaxPhi = twopi;
 

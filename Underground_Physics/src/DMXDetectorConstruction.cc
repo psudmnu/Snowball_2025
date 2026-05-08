@@ -102,8 +102,10 @@ DMXDetectorConstruction::DMXDetectorConstruction()
   theRoomMinEkine     = 250.0*eV; // minimum kinetic energy required in volume
   
   //Zero the G4Cache objects to contain logical volumes
-  LXeSD.Put(0);
+ // LXeSD.Put(0); removed (was intial hit location prior to water)
   pmtSD.Put(0);
+  waterSD.Put(0);
+
 }
 
 
@@ -306,20 +308,20 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 */
 
     //Kaitlyn Attempt - Definitions
-    G4LogicalVolume* quartztube_log;
-  G4VPhysicalVolume* quartztube_phys;
+   G4LogicalVolume* quartztube_log;
+   G4VPhysicalVolume* quartztube_phys;
 
-  G4LogicalVolume* metallid_log;
-  G4VPhysicalVolume* metallid_phys;
+ // G4LogicalVolume* metallid_log;
+  //G4VPhysicalVolume* metallid_phys;
 
-  //G4LogicalVolume* water_log;
+ // G4LogicalVolume* water_log;
   G4VPhysicalVolume* water_phys;
 
- // G4LogicalVolume* huber_log;
- // G4VPhysicalVolume* huber_phys;
+  G4LogicalVolume* huber_log;
+  G4VPhysicalVolume* huber_phys;
 
- // G4LogicalVolume* bath_log;
- // G4VPhysicalVolume* bath_phys;
+  G4LogicalVolume* bath_log;
+  G4VPhysicalVolume* bath_phys;
 
     // At the very top of your Construct() method
   
@@ -327,59 +329,64 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
    G4Tubs * quartz_cyllinder = new G4Tubs("quartz_cyllinder",1.775*cm, 2.1*cm, 3.45*cm, 0. *deg, 360.*deg);
    G4Sphere* quartz_semicircle = new G4Sphere("quartz_semicircle", 1.775*cm, 2.1*cm, 0.*deg, 360.*deg, 90*deg, 180.0*deg);
    G4Tubs* quartz_lip = new G4Tubs("quartz_lip",1.775*cm, 3.75*cm, 0.5*cm, 0.*deg, 360.*deg);
-  // G4Box* huber_metal = new G4Box("huber_metal",12.75*cm, 22.50*cm, 23.80*cm);
-   //G4Box* huber_cutout = new G4Box("huber_cutout",8.5*cm, 4.25*cm,6.75*cm);
+   G4Box* huber_metal = new G4Box("huber_metal",12.75*cm, 22.50*cm, 23.80*cm);
+   G4Box* huber_cutout = new G4Box("huber_cutout",8.5*cm, 4.25*cm,6.75*cm);
 
    //Removing the tube from the bath's space
-  //G4Tubs * quartz_cyllinderremoval = new G4Tubs("quartz_cyllinder",0.*cm, 2.1*cm, 3.45*cm, 0. *deg, 360.*deg);
-  // G4Sphere* quartz_semicircleremoval = new G4Sphere("quartz_semicircle", 0.*cm, 2.1*cm, 0.*deg, 360.*deg, 90*deg, 180.0*deg);
-  // G4Tubs* quartz_lipremoval = new G4Tubs("quartz_lip",0.*cm, 3.75*cm, 0.5*cm, 0.*deg, 360.*deg);
+  G4Tubs * quartz_cyllinderremoval = new G4Tubs("quartz_cyllinderremove",0.*cm, 2.1*cm, 3.45*cm, 0. *deg, 360.*deg);
+   G4Sphere* quartz_semicircleremoval = new G4Sphere("quartz_semicircleremove", 0.*cm, 2.1*cm, 0.*deg, 360.*deg, 90*deg, 180.0*deg);
+   G4Tubs* quartz_lipremoval = new G4Tubs("quartz_lipremove",0.*cm, 3.75*cm, 0.5*cm, 0.*deg, 360.*deg);
 
    //Kaitlyn lid attempt
-   G4Tubs* metallid = new G4Tubs("metallid",0.*cm, 3.75*cm, 0.2*cm, 0.*deg, 360.*deg);
+  // G4Tubs* metallid = new G4Tubs("metallid",0.*cm, 3.75*cm, 0.2*cm, 0.*deg, 360.*deg);
                     //inner radius, outer radius, thickness, degree start, degree finish 
 
 
-   G4Tubs *tubewater = new G4Tubs("tube_water", 0.0*cm, 1.775*cm, 0.5*cm, 0. *deg, 360. *deg);
-   G4Sphere*tubewaterbase = new G4Sphere("tube_waterbase",0.0*cm, 1.775*cm, 0.0*deg, 360*deg, 90*deg, 180.0*deg);
+   G4Tubs* tubewater = new G4Tubs("tube_water", 0.0*cm, 1.775*cm-0.01*mm, 0.545*cm, 0. *deg, 360. *deg);
+   G4Sphere* tubewaterbase = new G4Sphere("tube_waterbase",0.0*cm, 1.775*cm-0.01*mm, 0.0*deg, 360*deg, 90*deg, 180.0*deg);
 
 
    //Put the tube together
    G4UnionSolid* tubewolip = new G4UnionSolid("tubewolip", quartz_cyllinder, quartz_semicircle, 
     G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,-3.45*cm)));
- //  G4UnionSolid* tubewolipremoval = new G4UnionSolid("tubewolipremoval", quartz_cyllinderremoval, quartz_semicircleremoval, 
-  //  G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,-3.45*cm)));
+   G4UnionSolid* tubewolipremoval = new G4UnionSolid("tubewolipremoval", quartz_cyllinderremoval, quartz_semicircleremoval, 
+    G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,-3.45*cm)));
    G4UnionSolid* quartz_tube = new G4UnionSolid("quartz_tube", tubewolip, quartz_lip, 
     G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,3.45*cm)));
   G4UnionSolid* tube_water = new G4UnionSolid("tube_water", tubewater, tubewaterbase, 
-    G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,-0.5*cm)));
-   // G4UnionSolid* quartz_tuberemoval = new G4UnionSolid("quartz_tube", tubewolipremoval, quartz_lipremoval, 
-   // G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,3.45*cm)));
-   // G4UnionSolid* tuberemovalspace = new G4UnionSolid("tuberemovalspace", tubewolip, quartz_lip, 
-  //  G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,3.45*cm)));
-   //G4SubtractionSolid* huber_tub = new G4SubtractionSolid("huber_tub",huber_metal,huber_cutout, G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,17.05*cm)));
-  // G4UnionSolid* huber_bath = new G4UnionSolid("huber_bath", huber_tub, huber_cutout, G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,20.425*cm)))
-  // G4SubtractionSolid* huber_cutout2 = new G4SubtractionSolid("huber_cutout2",huber_cutout,quartz_tuberemoval, G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,3.45*cm)));
+    G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,-0.545*cm)));
+    G4UnionSolid* quartz_tuberemoval = new G4UnionSolid("quartz_tuberemoval", tubewolipremoval, quartz_lipremoval, 
+    G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,3.45*cm)));
+    G4UnionSolid* tuberemovalspace = new G4UnionSolid("tuberemovalspace", tubewolip, quartz_lip, 
+    G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,3.45*cm)));
+   
+    G4SubtractionSolid* huber_tub = new G4SubtractionSolid("huber_tub",huber_metal,huber_cutout, G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,17.05*cm)));
+   
+    G4UnionSolid* huber_bath = new G4UnionSolid("huber_bath", huber_tub, huber_cutout, G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,20.425*cm)));
+   
+    G4SubtractionSolid* huber_cutout2 = new G4SubtractionSolid("huber_cutout2",huber_cutout,quartz_tuberemoval, G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,2.8*cm)));
 
    //Kaitlyn Attempt in logical & physical volumes
-    quartztube_log = new G4LogicalVolume(quartz_tube,pmt_mat,"quartztube_log"); //previously 18.675? 20.35
-    quartztube_phys = new G4PVPlacement(0, G4ThreeVector(0*cm,0.*cm,19.8*cm), "quartztube_phys", quartztube_log, lab_phys, false, 0);
+   
+    bath_log = new G4LogicalVolume(huber_cutout2, ethanol_mat,"bath_log");
+    bath_phys = new G4PVPlacement(0,G4ThreeVector(0*cm,0.*cm,17.05*cm), "bath_phys", bath_log, lab_phys, false, 0);
+   
+   quartztube_log = new G4LogicalVolume(quartz_tube,pmt_mat,"quartztube_log"); 
+   quartztube_phys = new G4PVPlacement(0, G4ThreeVector(0*cm,0.*cm,19.85*cm), "quartztube_phys", quartztube_log, lab_phys, false, 0);
 
-//Try adding 2 physical volumes rather than unioning
-
-    metallid_log = new G4LogicalVolume(metallid, ring_mat,"metallid_log");
-    metallid_phys = new G4PVPlacement(0,G4ThreeVector(0*cm,0.*cm,23.9*cm), "metallid_phys", metallid_log, lab_phys, false, 0);
+   // metallid_log = new G4LogicalVolume(metallid, ring_mat,"metallid_log");
+   // metallid_phys = new G4PVPlacement(0,G4ThreeVector(0*cm,0.*cm,23.9*cm), "metallid_phys", metallid_log, lab_phys, false, 0);
 
     water_log = new G4LogicalVolume(tube_water, H2O_mat, "water_log");
-    water_phys = new G4PVPlacement(0, G4ThreeVector(0*cm,0*cm,16.850*cm), "water_phys", water_log, lab_phys, false, 0);
+    water_phys = new G4PVPlacement(0, G4ThreeVector(0*cm,0*cm,16.945*cm), "water_phys", water_log, lab_phys, false, 0);
 
 
-   /* huber_log = new G4LogicalVolume(huber_tub, ring_mat,"huber_log");
+
+
+    huber_log = new G4LogicalVolume(huber_tub, ring_mat,"huber_log");
     huber_phys = new G4PVPlacement(0,G4ThreeVector(0*cm,0.*cm,0*cm), "huber_phys", huber_log, lab_phys, false, 0);
 
-    bath_log = new G4LogicalVolume(huber_cutout2, H2O_mat,"bath_log");
-    bath_phys = new G4PVPlacement(0,G4ThreeVector(0*cm,0.*cm,17.05*cm), "bath_phys", bath_log, lab_phys, false, 0);*/
-
+  
     // attributes
  /* G4VisAttributes* LXe_vat = new G4VisAttributes(lblue);
   LXe_vat->SetForceSolid(true);	
@@ -387,7 +394,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   LXe_log->SetVisAttributes(LXe_vat); */
 
   //Kaitlyn Attempt w/ Colors
-  G4VisAttributes* qtube = new G4VisAttributes(orange);
+/*  G4VisAttributes* qtube = new G4VisAttributes(orange);
   qtube->SetForceSolid(true);
   qtube->SetVisibility(true);
   quartztube_log->SetVisAttributes(qtube);
@@ -395,7 +402,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4VisAttributes* tubelid = new G4VisAttributes(lgreen);
   tubelid->SetForceSolid(true);
   tubelid->SetVisibility(true);
-  metallid_log->SetVisAttributes(tubelid);
+  metallid_log->SetVisAttributes(tubelid);*/
 
 /*  G4VisAttributes* huber = new G4VisAttributes(blue);
   huber->SetForceSolid(true);
@@ -556,7 +563,7 @@ void DMXDetectorConstruction::ConstructSDandField()
   // sensitive detectors ..................................................
   // ......................................................................
 
-  if (LXeSD.Get() == 0) 
+  /*if (LXeSD.Get() == 0) 
     {    
       G4String name="/DMXDet/LXeSD";
       DMXScintSD* aSD = new DMXScintSD(name);
@@ -564,7 +571,19 @@ void DMXDetectorConstruction::ConstructSDandField()
     }
   G4SDManager::GetSDMpointer()->AddNewDetector(LXeSD.Get());  
   //adjust to what section we are looking to see hits in
-  if (water_log)   water_log-> SetSensitiveDetector(LXeSD.Get());
+  if (water_log)   water_log-> SetSensitiveDetector(LXeSD.Get());*/
+
+  //Make one explicitly for water
+  if (waterSD.Get() == 0) 
+    {    
+      G4String name="/DMXDet/waterSD";
+      DMXScintSD* aSD = new DMXScintSD(name);
+      waterSD.Put(aSD);
+    }
+G4SDManager::GetSDMpointer()->AddNewDetector(waterSD.Get());
+ 
+ if (water_log)   water_log-> SetSensitiveDetector(waterSD.Get());
+
 
   if (pmtSD.Get() == 0)
     {

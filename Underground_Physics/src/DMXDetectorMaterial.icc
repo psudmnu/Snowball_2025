@@ -281,4 +281,4 @@ jacketflange_mat = ssteel;
          pmt_mat = quartz;
       phcath_mat = cathmetalAl;
       H2O_mat = water;
-     // ethanol_mat = ethanol;
+     ethanol_mat = ethanol;

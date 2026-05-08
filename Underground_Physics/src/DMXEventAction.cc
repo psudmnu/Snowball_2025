@@ -223,7 +223,7 @@ void DMXEventAction::EndOfEventAction(const G4Event* evt) {
     for (G4int i=0; i<S_hits; i++) {
       if(i==0) {
 	firstParticleName = (*SHC)[0]->GetParticle();
-	firstLXeHitTime   = (*SHC)[0]->GetTime();
+  firstLXeHitTime   = (*SHC)[0]->GetTime();
 	firstParticleE = (*SHC)[0]->GetParticleEnergy();
 	if (event_id%printModulo == 0 && S_hits > 0) {
 	  G4cout << "     First hit in LXe: " << firstParticleName << G4endl;
@@ -345,7 +345,7 @@ void DMXEventAction::writeScintHitsToFile(const DMXScintHitsCollection* SHC)
       
       hitsfile = new std::ofstream;
       hitsfile->open(filename);
-      (*hitsfile) <<"Evt     Eprim   Etot    LXe     LXeTime PMT     PMTTime Seed1           Seed2           First   Flags" 
+      (*hitsfile) <<"Evt     Eprim   Etot    LXe     LXeTime PMT     PMTTime Seed1           Seed2           First   ParentID   Second     ParentID2    Flags" 
 	       << G4endl;
       (*hitsfile) <<"#       MeV     MeV     hits    ns      hits    ns                                      hit"
 	       << G4endl
@@ -354,6 +354,10 @@ void DMXEventAction::writeScintHitsToFile(const DMXScintHitsCollection* SHC)
 
   if(S_hits) {
 
+  G4int firstPDGCode = (*SHC)[0]->GetPDGEncoding();
+  G4int secondPDGCode = (*SHC)[1]->GetPDGEncoding();
+    G4int ParentID = (*SHC)[0]->GetParentID();
+    G4int ParentID2nd = (*SHC)[1]->GetParentID();
     if(hitsfile->is_open()) {
 
 
@@ -381,6 +385,12 @@ void DMXEventAction::writeScintHitsToFile(const DMXScintHitsCollection* SHC)
 		  << (electron_ev ? "electron " : "") 
 		  << (other_ev    ? "other " : "") 
 		  << G4endl;
+
+      // Testing the output (was initially above) << firstPDGCode << "\t"
+      //<< ParentID << "\t" 
+      //<< secondPDGCode << "\t"
+      //<< ParentID2nd << "\t"
+
 
       if (event_id%printModulo == 0)
 	G4cout << "     Event summary in file " << filename << G4endl;  
@@ -471,7 +481,6 @@ void DMXEventAction::writeScintHitsToFile(const DMXScintHitsCollection* SHC)
 	man->FillNtupleDColumn(3,4,x);
 	man->FillNtupleDColumn(3,5,y);
 	man->FillNtupleDColumn(3,6,z);
-	//man->FillNtupleDColumn(3,5,particleName);
 	
 	man->FillNtupleDColumn(3,7,PDGCode);
 	man->FillNtupleDColumn(3,8,particleEnergy);

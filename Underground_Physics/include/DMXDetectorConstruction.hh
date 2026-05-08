@@ -128,10 +128,10 @@ private:
   //G4VPhysicalVolume* pmt_phys; 
   G4LogicalVolume*   phcath_log;
 
-  G4LogicalVolume* water_log;
+ G4LogicalVolume* water_log;
+ 
 
-
-  G4Cache<DMXScintSD*> LXeSD; //pointer to sensitive detectors
+  G4Cache<DMXScintSD*> waterSD;  //pointer to sensitive detectors
   G4Cache<DMXPmtSD*> pmtSD;
 
   // pointer to the Detector Messenger:

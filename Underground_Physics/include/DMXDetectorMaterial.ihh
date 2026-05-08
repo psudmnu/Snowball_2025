@@ -62,3 +62,4 @@
   G4Material*       pmt_mat;
   G4Material*    phcath_mat;
   G4Material*       H2O_mat;
+  G4Material*    ethanol_mat;
