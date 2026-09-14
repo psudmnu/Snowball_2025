@@ -1,0 +1,30 @@
+/run/initialize
+/vis/open HepRepFileG
+# /run/initialize 
+
+/vis/heprep/setFileName HRgeantino1MeV
+/vis/open HepRepFile
+/vis/scene/create
+/vis/scene/add/volume
+/vis/scene/add/trajectories
+/vis/sceneHandler/attach
+/vis/viewer/set/style surface
+/vis/viewer/set/autoRefresh true
+/vis/scene/add/hits
+# /vis/scene/add/logicalVolume
+
+# /vis/heprep/appendGeometry false  
+# /vis/heprep/addPointAttributes 0 
+
+
+# /control/verbose 1
+# /run/verbose 1
+# /event/verbose 1
+# /tracking/verbose 1
+
+/dmx/gun/particle geantino
+/dmx/gun/energy 1 MeV
+/dmx/gun/position 0 0 -10 cm
+/dmx/gun/direction 0 0 1
+
+/run/beamOn 1

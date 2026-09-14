@@ -63,6 +63,9 @@
 #include "G4Ions.hh"
 #include "G4TrackingManager.hh"
 #include "G4Track.hh"
+#include "G4LogicalVolumeStore.hh" //additions for accessing shooting_log
+#include "G4LogicalVolume.hh"
+#include "G4PhysicalVolumeStore.hh" //additions for accessign shooting_phys
 
 
 DMXParticleSource::DMXParticleSource() {
@@ -70,27 +73,29 @@ DMXParticleSource::DMXParticleSource() {
   NumberOfParticlesToBeGenerated = 1;
   particle_definition = NULL;
   G4ThreeVector zero(0., 0., 0.);
-  particle_momentum_direction = G4ParticleMomentum(1., 0., 0.);
-  particle_energy = 1.0*MeV;
-  particle_position = zero;
+  //particle_momentum_direction = G4ParticleMomentum(1., 0., 0.);
+ // particle_energy = 1.0*MeV;
+ // particle_position = zero;
   particle_time = 0.0;
   particle_polarization = zero;
   particle_charge = 0.0;
 
   
   SourcePosType = "Volume";
-  Shape = "NULL";
+ // Shape = "NULL"; //Changed from Null to Shell for new random generation - EDIT INTO NEW SHAPE WITH DIST TYPE
+  Shape = "Shell";
   halfz = 0.;
   Radius = 0.;
   CentreCoords = zero;
   Confine = false;
   VolName = "NULL";
 
-  AngDistType = "iso"; 
-  MinTheta = 0.;
-  MaxTheta = 0;//(3./8.)*pi;
+ // AngDistType = "iso"; 
+ AngDistType = "randominward"; //can I keep iso and get the theta phi bounds.rnadominward a change that leads to not running 
+  MinTheta = 0;
+  MaxTheta = 1./6.*pi; //0-3/8pi
   MinPhi = 0.;
-  MaxPhi = twopi;
+  MaxPhi = 2*pi;
 
   EnergyDisType = "Mono";
   MonoEnergy = 1*MeV;
@@ -192,14 +197,14 @@ void DMXParticleSource::GeneratePointSource()
       G4cout << "Error SourcePosType is not set to Point" << G4endl;
 }
 
-
+//edits for random particle in Shell clause done here!! 8.27.26
 void DMXParticleSource::GeneratePointsInVolume()
 {
   G4ThreeVector RandPos;
   G4double x=0., y=0., z=0.;
   
-  if(SourcePosType != "Volume" && verbosityLevel >= 1)
-    G4cout << "Error SourcePosType not Volume" << G4endl;
+  if(SourcePosType != "Volume" && verbosityLevel >= 1){
+    G4cout << "Error SourcePosType not Volume" << G4endl;}
   
   if(Shape == "Sphere") {
     x = Radius*2.;
@@ -228,8 +233,22 @@ void DMXParticleSource::GeneratePointsInVolume()
       z = (z*2.*halfz) - halfz;
     }
   }
+
+  else if(Shape == "Shell"){
+
+  G4LogicalVolume* shooting_log = G4LogicalVolumeStore::GetInstance()->GetVolume("shooting_log");
+  G4VPhysicalVolume* shooting_phys = G4PhysicalVolumeStore::GetInstance()->GetVolume("shooting_phys");
   
-  else
+  G4ThreeVector local_particle_position = shooting_log->GetSolid()->GetPointOnSurface();
+  
+  G4ThreeVector particle_coordinates = shooting_phys-> GetObjectTranslation() + local_particle_position;
+
+  particle_position = particle_coordinates; //error in using local coordinates vs global. everything needs to shift up
+
+  }
+
+  
+  else{
     G4cout << "Error: Volume Shape Does Not Exist" << G4endl;
 
   RandPos.setX(x);
@@ -237,7 +256,7 @@ void DMXParticleSource::GeneratePointsInVolume()
   RandPos.setZ(z);
   particle_position = CentreCoords + RandPos;
 
-}
+}}
 
 
 G4bool DMXParticleSource::IsSourceConfined()
@@ -305,6 +324,40 @@ void DMXParticleSource::GenerateIsotropicFlux()
     G4cout << "Generating isotropic vector: " << particle_momentum_direction << G4endl;
 }
 
+void DMXParticleSource::GenerateInwardFlux()
+{
+  G4ThreeVector watercenter(0.0*cm,0.0*cm,16.945*cm);
+  G4ThreeVector inward = (watercenter-particle_position).unit();
+
+  G4double rndm, rndm2;
+  G4double px, py, pz;
+
+  G4double sintheta, sinphi, costheta, cosphi;
+  
+   rndm = G4UniformRand();
+   rndm2 = G4UniformRand();
+  costheta = std::cos(MinTheta) - rndm * (std::cos(MinTheta) - std::cos(MaxTheta));
+  sintheta = std::sqrt(1. - costheta*costheta);
+  
+  rndm2 = G4UniformRand();
+  Phi = MinPhi + (MaxPhi - MinPhi) * rndm2; 
+
+  sinphi = std::sin(Phi);
+  cosphi = std::cos(Phi);
+
+  px = sintheta * cosphi;
+  py = sintheta * sinphi;
+  pz = costheta;
+
+G4ThreeVector dir(px,py,pz);
+
+dir.rotateUz(inward);
+
+particle_momentum_direction = dir.unit();
+
+if(verbosityLevel >= 2){
+    G4cout << "Generating inward vector: " << particle_momentum_direction << G4endl;
+}}
 
 void DMXParticleSource::SetEnergyDisType(G4String DisType)
 {
@@ -386,13 +439,18 @@ void DMXParticleSource::GeneratePrimaryVertex(G4Event *evt)
     GenerateIsotropicFlux();
   else if(AngDistType == "direction")
     SetParticleMomentumDirection(particle_momentum_direction);
+  else if(AngDistType == "randominward")
+    GenerateInwardFlux();
   else
     G4cout << "Error: AngDistType has unusual value" << G4endl;
-  // Energy stuff
+  
+    // Energy stuff
   if(EnergyDisType == "Mono")
     GenerateMonoEnergetic();
   else
     G4cout << "Error: EnergyDisType has unusual value" << G4endl;
+
+    
   
   // create a new vertex
   G4PrimaryVertex* vertex = 

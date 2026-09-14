@@ -1,0 +1,13 @@
+/run/initialize
+/vis/heprep/setFileName HRNameTest2
+/vis/open HepRepFile
+/vis/drawVolume
+/vis/scene/create 
+/vis/scene/add/volume LXe_phys
+/vis/sceneHandler/attach
+/vis/viewer/set/viewpointThetaPhi 90 0
+/vis/scene/add/trajectories smooth
+/vis/scene/endOfEventAction accumulate
+/tracking/storeTrajectory 1
+/run/beamOn 1
+

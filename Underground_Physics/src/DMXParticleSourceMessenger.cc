@@ -160,7 +160,7 @@ DMXParticleSourceMessenger::DMXParticleSourceMessenger
   shapeCmd->SetGuidance("Sets source shape type.");
   shapeCmd->SetParameterName("Shape",true,true);
   shapeCmd->SetDefaultValue("NULL");
-  shapeCmd->SetCandidates("Sphere Cylinder");
+  shapeCmd->SetCandidates("Sphere Cylinder Shell"); //shell added 8/31 for random shooting around detector
   
   // centre coordinates
   centreCmd = new G4UIcmdWith3VectorAndUnit("/dmx/gun/centre",this);
@@ -196,7 +196,7 @@ DMXParticleSourceMessenger::DMXParticleSourceMessenger
   angtypeCmd->SetGuidance("Possible variables are: iso direction");
   angtypeCmd->SetParameterName("AngDis",true,true);
   angtypeCmd->SetDefaultValue("iso");
-  angtypeCmd->SetCandidates("iso direction");
+  angtypeCmd->SetCandidates("iso direction randominward");
   
   // energy distribution
   energytypeCmd = new G4UIcmdWithAString("/dmx/gun/energytype",this);

@@ -104,7 +104,8 @@ private:
   G4VPhysicalVolume* lab_phys;  
 
 
- 
+ G4LogicalVolume* shooting_log;
+ G4VPhysicalVolume* shooting_phys;
  
 
 
@@ -129,7 +130,7 @@ private:
   G4LogicalVolume*   phcath_log;
 
  G4LogicalVolume* water_log;
- 
+
 
   G4Cache<DMXScintSD*> waterSD;  //pointer to sensitive detectors
   G4Cache<DMXPmtSD*> pmtSD;

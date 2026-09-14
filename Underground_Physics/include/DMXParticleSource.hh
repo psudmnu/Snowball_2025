@@ -79,6 +79,7 @@ class DMXParticleSource : public G4VPrimaryGenerator {
      void SetAngDistType(G4String);
      void SetParticleMomentumDirection(G4ParticleMomentum);
      void GenerateIsotropicFlux();
+     void GenerateInwardFlux();
 
      // energy distribution 
      void SetEnergyDisType(G4String);

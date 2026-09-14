@@ -323,6 +323,10 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4LogicalVolume* bath_log;
   G4VPhysicalVolume* bath_phys;
 
+  G4LogicalVolume* shooting_log;
+  G4VPhysicalVolume* shooting_phys;
+
+
     // At the very top of your Construct() method
   
     //Kaitlyn tube attempt
@@ -366,6 +370,16 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
    
     G4SubtractionSolid* huber_cutout2 = new G4SubtractionSolid("huber_cutout2",huber_cutout,quartz_tuberemoval, G4Transform3D(G4RotationMatrix(), G4ThreeVector(0*cm,0*cm,2.8*cm)));
 
+   //making random shooting location
+   G4Box* outer_shoot = new G4Box("shooting_outer",1.8*cm, 1.8*cm,1.44*cm);
+   G4Box* inner_shoot = new G4Box("shooting_inner",1.79*cm, 1.79*cm,1.43*cm);
+
+   G4SubtractionSolid* shooting_perimeter = new G4SubtractionSolid("gun_range",outer_shoot,inner_shoot, G4Transform3D(G4RotationMatrix(),G4ThreeVector(0*cm,0*cm,0*cm)));
+
+   shooting_log = new G4LogicalVolume(shooting_perimeter,lab_mat,"shooting_log");
+   shooting_phys = new G4PVPlacement(0,G4ThreeVector(0*cm,0*cm,16.058*cm),"shooting_phys",shooting_log,lab_phys,false,0);
+   //16.945-0.545-0.545 - to center water in shooting volume
+//-0.887
    //Kaitlyn Attempt in logical & physical volumes
    
     bath_log = new G4LogicalVolume(huber_cutout2, ethanol_mat,"bath_log");
@@ -379,8 +393,6 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
     water_log = new G4LogicalVolume(tube_water, H2O_mat, "water_log");
     water_phys = new G4PVPlacement(0, G4ThreeVector(0*cm,0*cm,16.945*cm), "water_phys", water_log, lab_phys, false, 0);
-
-
 
 
     huber_log = new G4LogicalVolume(huber_tub, ring_mat,"huber_log");
