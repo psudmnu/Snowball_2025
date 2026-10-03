@@ -63,10 +63,13 @@ class DMXEventAction : public G4UserEventAction {
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
 
+    void SetStepNo(G4int val) { StepNo = val; }
+
   private:
     void writeScintHitsToFile(const DMXScintHitsCollection*);
     void writePmtHitsToFile(const DMXPmtHitsCollection*);
     void drawTracks(const G4Event*);
+
 
   public:
     void SetDrawTrksFlag (G4String val)     {drawTrksFlag    = val;};
@@ -106,6 +109,7 @@ class DMXEventAction : public G4UserEventAction {
     G4double hitTime;			// added 
     G4String particleName;
     G4String firstParticleName;
+    G4int StepNo; //added
 
     G4bool gamma_ev;
     G4bool neutron_ev;

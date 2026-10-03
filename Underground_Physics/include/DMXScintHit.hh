@@ -66,6 +66,9 @@ class DMXScintHit : public G4VHit
       void Draw();
       void Print();
 
+      void SetStepNo(G4int val) { StepNo = val; } //added
+      G4int GetStepNo() const { return StepNo; } //added
+
   public:
   
       void SetEdep           (G4double de)       { edep = de; };
@@ -77,6 +80,7 @@ class DMXScintHit : public G4VHit
       void SetTrackID        (G4int TrID)	   { TrackID = TrID; };
       void SetParentID       (G4int ParID)	   { ParentID = ParID; };
       void SetTrackLength    (G4double TrLen)    { TrackLength = TrLen; };
+  
 
       G4double GetEdep()                         { return edep; };      
       G4ThreeVector GetPos()                     { return pos; };
@@ -98,6 +102,7 @@ class DMXScintHit : public G4VHit
       G4int 	    TrackID;
       G4int 	    ParentID;
       G4double     TrackLength;
+      G4int StepNo;
 
 
 };
