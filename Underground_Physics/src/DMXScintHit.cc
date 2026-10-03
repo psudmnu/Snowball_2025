@@ -62,6 +62,7 @@ DMXScintHit::DMXScintHit()
   TrackID = 0;
   ParentID = 0;
   TrackLength = 0;
+  StepNo = 0; //added
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -10,7 +10,7 @@
 #/control/verbose 1
 #/run/verbose 1 //usually 1
 #/tracking/verbose 1
-#/hits/verbose 2
+#/hits/verbose 1
 
 #
 # draw flags
@@ -30,6 +30,10 @@
 /process/had/rdm/verbose 0
 /process/had/rdm/allVolumes
 #
+
+# SEED
+/random/setSeeds 123456
+
 # gun: particle
 /dmx/gun/verbose 0
 /dmx/gun/particle neutron
@@ -51,8 +55,8 @@
 ##/dmx/gun/centre 0 0 -30 cm
 /dmx/gun/shape Shell
 #
-/dmx/hitsfile 10000neutron3MeVrandomgeometryshot.out
+/dmx/hitsfile 10seededcompareRitchey.out
 /dmx/pmtfile neutron_pmt.out
-/dmx/histogramfile 10000neutron3MeVrandomgeometryshot
+/dmx/histogramfile 10seededcompareRitchey
 #
-/run/beamOn 10000
+/run/beamOn 10

@@ -95,6 +95,19 @@ G4bool DMXScintSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4int TrackID = aStep->GetTrack()->GetTrackID();
   G4int ParentID = aStep->GetTrack()->GetParentID();
   G4double TrackLength = aStep->GetTrack()->GetTrackLength();
+  G4int StepNo = aStep->GetTrack()->GetCurrentStepNumber();
+  
+  if (StepNo == 1){
+    G4ThreeVector preposition = aStep->GetPreStepPoint()->GetPosition();
+    DMXScintHit* initialHit = new DMXScintHit();
+    initialHit->SetStepNo(0);
+    initialHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
+    initialHit->SetTrackID(TrackID);
+    initialHit->SetParentID(ParentID);
+    initialHit->SetEdep(0.0);
+    initialHit->SetParticleEncoding(aStep->GetTrack()->GetDefinition()->GetPDGEncoding());
+    HitID = scintillatorCollection->insert(initialHit);
+  }
 
   G4double stepl = 0.;
   if ( (particleType->GetPDGCharge() != 0.) || (particleType->GetPDGEncoding() == 2112) )
@@ -115,6 +128,7 @@ G4bool DMXScintSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   newHit->SetTrackID(TrackID);
   newHit->SetParentID(ParentID);
   newHit->SetTrackLength(TrackLength);
+  newHit->SetStepNo(StepNo); //added
   
   HitID = scintillatorCollection->insert(newHit);
   

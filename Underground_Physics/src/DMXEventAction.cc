@@ -345,7 +345,7 @@ void DMXEventAction::writeScintHitsToFile(const DMXScintHitsCollection* SHC)
       
       hitsfile = new std::ofstream;
       hitsfile->open(filename);
-      (*hitsfile) <<"Evt     Eprim   Etot    LXe     LXeTime PMT     PMTTime Seed1           Seed2           First   ParentID   Second     ParentID2    Flags" 
+      (*hitsfile) <<"Evt #    Eprim (MeV)   Etot (MeV)   LXe (hits)   LXeTime PMT (ns)    PMTTime  Seed1     Seed2      First   ParentID   Second     ParentID2    Flags " 
 	       << G4endl;
       (*hitsfile) <<"#       MeV     MeV     hits    ns      hits    ns                                      hit"
 	       << G4endl
@@ -461,16 +461,17 @@ void DMXEventAction::writeScintHitsToFile(const DMXScintHitsCollection* SHC)
     	hitTime = (*SHC)[i]->GetTime();
     	
     	G4double TrackLength = (*SHC)[i]->GetTrackLength();
-    	
-    	
+
+  
+    	StepNo = (*SHC)[i]->GetStepNo(); //added
     	
     	G4double x;
     	G4double y;
     	G4double z;
     	
     	x = ((*SHC)[i]->GetPos()).x()/mm;
-	y = ((*SHC)[i]->GetPos()).y()/mm;
-	z = ((*SHC)[i]->GetPos()).z()/mm;
+	    y = ((*SHC)[i]->GetPos()).y()/mm;
+	    z = ((*SHC)[i]->GetPos()).z()/mm;
 	
     
     	//Fill ntuple #3
@@ -487,6 +488,7 @@ void DMXEventAction::writeScintHitsToFile(const DMXScintHitsCollection* SHC)
 	man->FillNtupleDColumn(3,9,hitEnergyDeposited);
 	man->FillNtupleDColumn(3,10,hitTime);
 	man->FillNtupleDColumn(3,11,TrackLength);
+  man->FillNtupleDColumn(3,12,StepNo);
 	
 	
 	man->AddNtupleRow(3);

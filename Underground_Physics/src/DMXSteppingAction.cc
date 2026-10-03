@@ -107,6 +107,7 @@ void DMXSteppingAction::UserSteppingAction(const G4Step* fStep)
   
  
   G4int StepNo = fStep->GetTrack()->GetCurrentStepNumber();
+
   if(StepNo == 1) 
     { 
       G4double partEnergy = fStep->GetPreStepPoint()->GetKineticEnergy();

@@ -159,6 +159,7 @@ void DMXRunAction::Book()
   man->CreateNtupleDColumn("hitEnergyDeposited");
   man->CreateNtupleDColumn("hitTime");
   man->CreateNtupleDColumn("TrackLength");
+  man->CreateNtupleDColumn("StepNumber"); //added 9.27.26 by Kaitlyn Konopka
   man->FinishNtuple();
   
   
